@@ -1,0 +1,15 @@
+# Entorno 
+devenv/
+env/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Entorno
+.env
+
+# OS
+.vscode/

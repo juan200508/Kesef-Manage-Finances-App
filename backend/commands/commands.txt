@@ -1,0 +1,12 @@
+
+--- LEVANTAR EL SERVIDOR EN PRODUCCIÓN
+La bandera `--reload` hace que el servidor se reinicie solo cada vez que se guarde un cambio en el código
+* uvicorn app.main:app --reload
+
+--- REALIZAR MIGRACIONES CON ALUMBIC
+* alembic revision --autogenerate -m "some comment" 
+    (Genera el archivo de migración al editar algún modelo, aquí se listan los cambios que queremos realizar en nuestra base de datos)
+* alembic current
+    (Muestra en que migración nos encontramos en ese momento)
+* alembic upgrade head
+    (Corre la migración generada en alembic/versions y actualiza la base de datos)
