@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from app.db.base import Base
+from app.db.base_class import Base
 
 class MonthlyIncome(Base):
     """Mapea la tabla `monthly_incomes` definida en sql/schema.sql."""

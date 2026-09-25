@@ -6,10 +6,6 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.db.base import Base
-from app.models.category import Category
-from app.models.user import User
-from app.models.movement import Movement
-from app.models.monthly_income import MonthlyIncome
 from app.core.config import settings
 
 
