@@ -18,7 +18,7 @@ def get_current_user(
     Se inyecta en cada endpoint que necesite aislar datos por usuario."""
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="No se pudo validar las credenciales",
+        detail="Credenciales no válidas",
         headers={"WWW-Authenticate": "Bearer"},
     )
 

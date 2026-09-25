@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, String, text
+from sqlalchemy import Column, DateTime, ForeignKey, String, text, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -19,10 +19,11 @@ class Category(Base):
     user_id = Column(
         UUID(as_uuid=True),
         ForeignKey("users.id"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
     name = Column(String(255), nullable=False)
+    is_global = Column(Boolean, nullable=False, server_default=text("false"))
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
 
     # Lado "muchos" de la relación: cada categoría pertenece a un usuario
