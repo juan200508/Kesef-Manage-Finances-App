@@ -17,7 +17,8 @@ class CategoryCreate(CategoryBase):
 class CategoryOut(CategoryBase):
     """Lo que la API devuelve."""
     id: UUID
-    user_id: UUID
+    user_id: UUID | None
+    is_global: bool
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
