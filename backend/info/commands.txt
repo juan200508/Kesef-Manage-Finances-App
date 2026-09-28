@@ -14,3 +14,7 @@ La bandera `--reload` hace que el servidor se reinicie solo cada vez que se guar
 --- GENERAR UNA NUEVA SECRET KEY PARA JWT
 * python scripts/generate_secret_key.py --bytes 48 
     (--bytes 48, especifica si queremos mas caracteres, por defecto son 32 bytes)
+
+--- VER LAS RUTAS CREADAS
+* http://localhost:8000/docs
+    (Aquí se pueden ver todos los endpoints que se han creado)
