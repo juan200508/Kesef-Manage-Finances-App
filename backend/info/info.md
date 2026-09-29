@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | users | id, email, hashed_password, full_name, created_at | — |
 | categories | id, user_id (FK), name, created_atm is_global | pertenece a users |
-| movements | id, user_id (FK), category_id (FK), movement_type, amount, description, movement_date, created_at | pertenece a users y categories |
+| movements | id, user_id (FK), category_id (FK), movement_type, amount, description, movement_date, created_at, update_at | pertenece a users y categories |
 | monthly_incomes | id, user_id (FK), year, month, amount, source, created_at | pertenece a users, admite varias fuentes por mes |
  
 `movement_type` está restringido a: COMPRA, CONSIGNACION, TRANSFERENCIA, RETIRO, PAGO, OTRO. Todos los IDs son UUID generados por PostgreSQL (`gen_random_uuid()`).
