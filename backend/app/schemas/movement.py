@@ -13,16 +13,24 @@ class MovementBase(BaseModel):
     description: str | None = None
     category_id: UUID
 
-
 class MovementCreate(MovementBase):
     """Lo que llega en el body de POST /movements."""
 
 
+class MovementUpdate(MovementBase):
+    """Los campos que el cliente requiera actualizar"""
+    category_id: UUID | None = None
+    movement_type: MovementType | None = None
+    amount: Decimal | None = None
+    description: str | None = None
+    movement_date: datetime | None = None
+    
 class MovementOut(MovementBase):
     """Lo que la API devuelve."""
     id: UUID
     user_id: UUID
     movement_date: datetime
     created_at: datetime
+    update_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

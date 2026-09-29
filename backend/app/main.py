@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db.base import Base
 from app.db.session import get_db
-from app.api.routers import auth, categories
+from app.api.routers import auth, categories, movements
 from app.core.exceptions import AppException
 
 logger = logging.getLogger(__name__)
@@ -43,3 +43,5 @@ def health_check(db: Session = Depends(get_db)):
 app.include_router(auth.router)
 # Ruta para categories
 app.include_router(categories.router)
+# Ruta para movements
+app.include_router(movements.router)
