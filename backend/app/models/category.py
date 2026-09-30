@@ -25,6 +25,7 @@ class Category(Base):
     name = Column(String(255), nullable=False)
     is_global = Column(Boolean, nullable=False, server_default=text("false"))
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Lado "muchos" de la relación: cada categoría pertenece a un usuario
     owner = relationship("User", back_populates="categories")

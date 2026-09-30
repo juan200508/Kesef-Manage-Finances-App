@@ -20,5 +20,6 @@ class CategoryOut(CategoryBase):
     user_id: UUID | None
     is_global: bool
     created_at: datetime
+    updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

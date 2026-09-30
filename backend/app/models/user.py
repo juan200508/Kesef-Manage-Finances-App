@@ -20,6 +20,7 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(255), nullable=True)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Lado "uno" de la relación: un usuario tiene muchas categorías
     categories = relationship("Category", back_populates="owner")
