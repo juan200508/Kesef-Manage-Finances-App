@@ -25,6 +25,7 @@ class UserOut(UserBase):
     """Lo que la API devuelve. Nunca incluye la contraseña."""
     id: UUID
     created_at: datetime
+    updated_at: datetime
 
     # Permite construir este schema directamente desde un objeto
     # SQLAlchemy (model_config en vez de orm_mode, que es la sintaxis vieja de Pydantic v1)

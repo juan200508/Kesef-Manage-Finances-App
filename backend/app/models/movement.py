@@ -42,7 +42,7 @@ class Movement(Base):
     description = Column(String(255), nullable=True)
     movement_date = Column(DateTime, server_default=func.now(), nullable=False)
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    update_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
+    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now(), nullable=False)
 
     # Lado "muchos" de la relación: cada movimiento pertenece a un usuario
     owner = relationship("User", back_populates="movements")
