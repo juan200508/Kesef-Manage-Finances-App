@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.db.base import Base
 from app.db.session import get_db
-from app.api.routers import auth, categories, movements, monthly_incomes
+from app.api.routers import auth, categories, movements, monthly_incomes, balance
 from app.core.exceptions import AppException
 
 logger = logging.getLogger(__name__)
@@ -47,3 +47,5 @@ app.include_router(categories.router)
 app.include_router(movements.router)
 # Ruta para monthly_incomes
 app.include_router(monthly_incomes.router)
+# Ruta para balances
+app.include_router(balance.router)
