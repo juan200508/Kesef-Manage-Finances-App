@@ -14,12 +14,21 @@ router = APIRouter(prefix="/balance", tags=['balance'])
 @router.get("", response_model=list[MonthlyBalanceOut])
 def get_balance(
     year: int,
-    month: int | None = Query(default=None, ge=1, le=12),
+    month: list[int] | None = Query(default=None),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    if month is not None:
-        balance = get_monthly_balance(db=db, user_id=current_user.id, month=month, year=year)
-        return [balance]
+    if month:
+        for m in month:
+            if not (1 <= m <=12):
+                raise HTTPException(
+                    status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                    detail=f"El mes {m} no es válido, debe estar entre 1 y 12."
+                )
+            
+        return [
+            get_monthly_balance(db=db, user_id=current_user.id, month=m, year=year)
+            for m in month
+        ]
 
     return get_yearly_balance(db=db, user_id=current_user.id, year=year)
