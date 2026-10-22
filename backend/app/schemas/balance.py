@@ -5,14 +5,14 @@ from pydantic import BaseModel
 
 
 class CategoryExpenseBreakdown(BaseModel):
-    "Desglose de los gastos totales en un mes por categorías"
+    """ Breakdown of the total expenses in a month by categories """
     category_id: UUID
     category_name: str
     total: Decimal
 
 
 class MonthlyBalanceOut(BaseModel):
-    "Balance calculado de un mes"
+    """Calculated balance of a month"""
     year: int
     month: int
     total_income: Decimal

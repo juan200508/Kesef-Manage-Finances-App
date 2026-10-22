@@ -1,28 +1,41 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class UserBase(BaseModel):
-    """Campos que se comparten entre crear y leer un usuario."""
+    """Fields that are share between created and read an user"""
     email: EmailStr
     full_name: str | None = None
 
 
 class UserCreate(UserBase):
-    """Lo que llega en el body de POST /register."""
-    password: str
-
+    """What comes in the body of the POST request to /register"""
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{
+                "full_name": "Test", "email": "test@test.com", "password": "test12345"
+            }]
+        }
+    )
+    password: str = Field(min_length=8, max_length=72, description="8 to 72 characters")
 
 class UserLogin(BaseModel):
-    """Lo que llega en el body de POST /login."""
+    """What comes in the body of the POST request to /login"""
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{
+                "email": "test@test.com", "password": "test12345"
+            }]
+        }
+    )
     email: EmailStr
     password: str
 
 
 class UserOut(UserBase):
-    """Lo que la API devuelve. Nunca incluye la contraseña."""
+    """What API returns. Never includes the password"""
     id: UUID
     created_at: datetime
     updated_at: datetime

@@ -8,8 +8,14 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Entorno
+# Variables de Entorno
 .env
+.env.test
 
 # OS
 .vscode/
+
+# Otros
+sql/querys.sql
+sql/schema.sql
+

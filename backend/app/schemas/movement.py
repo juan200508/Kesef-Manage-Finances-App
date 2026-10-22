@@ -7,26 +7,43 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MovementBase(BaseModel):
-    """Campos que se comparten entre crear y leer un movimiento."""
+    """Fields that are shared between create and read a movement"""
     movement_type: MovementType 
     amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
     description: str | None = None
     category_id: UUID
 
+
 class MovementCreate(MovementBase):
-    """Lo que llega en el body de POST /movements."""
+    """What comes in the body of the POST request to /movements"""
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{
+                "category_id": "b35650bb-0a02-4f37-ae85-61757dd1c6f1", "movement_type": "RETIRO", "amount": "500000.00",
+                "description": "Bank account retirement"
+            }]
+        }
+    )
 
 
 class MovementUpdate(MovementBase):
-    """Los campos que el cliente requiera actualizar"""
+    """ All the fields are optional: the client only sends what they want to change."""
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{
+                "amount": "700000.00"
+            }]
+        }
+    )
     category_id: UUID | None = None
     movement_type: MovementType | None = None
-    amount: Decimal | None = None
+    amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)] | None = None
     description: str | None = None
     movement_date: datetime | None = None
-    
+
+
 class MovementOut(MovementBase):
-    """Lo que la API devuelve."""
+    """What API returns"""
     id: UUID
     user_id: UUID
     movement_date: datetime

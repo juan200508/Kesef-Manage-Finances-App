@@ -5,17 +5,23 @@ from pydantic import BaseModel, ConfigDict
 
 
 class CategoryBase(BaseModel):
-    """Campos que se comparten entre crear y leer una categoría."""
+    """ Fields that are shared between create and read a category """
     name: str
 
 
 class CategoryCreate(CategoryBase):
-    """Lo que llega en el body de POST /categories."""
-    pass
+    """ All that is include in the body of the POST request to /categories """
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{
+                "name": "Vehículo"
+            }]
+        }
+    )
 
 
 class CategoryOut(CategoryBase):
-    """Lo que la API devuelve."""
+    """ What API returns """
     id: UUID
     user_id: UUID | None
     is_global: bool

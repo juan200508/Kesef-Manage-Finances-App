@@ -18,3 +18,6 @@ La bandera `--reload` hace que el servidor se reinicie solo cada vez que se guar
 --- VER LAS RUTAS CREADAS
 * http://localhost:8000/docs
     (Aquí se pueden ver todos los endpoints que se han creado)
+
+--- EJECUTAR LOS TESTS
+pytest test_file.py -v
