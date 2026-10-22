@@ -10,7 +10,7 @@ al status code correspondiente.
 class AppException(Exception):
     #Excepción base de la que heredan todas las excepciones de negocio.
 
-    def __init__(self, message: str = "Ocurrió un error en la aplicación"):
+    def __init__(self, message: str = "Something went wrong"):
         self.message = message
         super().__init__(self.message)
 
@@ -20,7 +20,7 @@ class NotFoundError(AppException):
     def __init__(self, resource_name: str, resource_id: str | None = None):
         self.resource_name = resource_name
         self.resource_id = resource_id
-        message = f"{resource_name} no encontrado"
+        message = f"{resource_name} not found"
         if resource_id:
             message += f" (id: {resource_id})"
         super().__init__(message)
@@ -29,7 +29,7 @@ class NotFoundError(AppException):
 class ConfigurationError(AppException):
     # Base para errores de configuración del sistema, no causados por el usuario.
     # Ej: falta un dato que el sistema debería tener sembrado (seed) de antemano
-    def __init__(self, message: str = "Error de configuración del sistema"):
+    def __init__(self, message: str = "Error in the system config"):
         super().__init__(message)
 
 
@@ -37,7 +37,7 @@ class ConfigurationError(AppException):
 
 class CategoryNotFoundError(NotFoundError):
     def __init__(self, category_id: str | None = None):
-        super().__init__(resource_name="Categoría", resource_id=category_id)
+        super().__init__(resource_name="Category", resource_id=category_id)
 
 
 class DefaultCategoryNotConfiguredError(ConfigurationError):
@@ -45,5 +45,5 @@ class DefaultCategoryNotConfiguredError(ConfigurationError):
     # para reasignar movimientos de una categoría eliminada
     def __init__(self, category_name: str = "Otros"):
         super().__init__(
-            message=f"La categoría de respaldo '{category_name}' no está configurada en el sistema"
+            message=f"The backup category '{category_name}' is not config in the system"
         )

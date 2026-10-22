@@ -1,26 +1,28 @@
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from sqlalchemy.orm import Session
-from datetime import datetime
 
+from app.core.rate_limit import limiter, user_or_ip_key, READ_LIMIT, WRITE_LIMIT
 from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models.user import User
-from app.models.monthly_income import MonthlyIncome, MonthlyIncomeSource
+from app.models.monthly_income import MonthlyIncome
 from app.schemas.monthly_income import MonthlyIncomeCreate, MonthlyIncomeUpdate, MonthlyIncomeOut
+from app.core.responses import AUTH_RESPONSES
 
 
-router = APIRouter(prefix="/monthly_incomes", tags=["monthly_incomes"])
+router = APIRouter(prefix="/monthly_incomes", tags=["monthly_incomes"], responses=AUTH_RESPONSES)
 
 
-@router.post("", response_model=MonthlyIncomeOut, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=MonthlyIncomeOut, status_code=status.HTTP_201_CREATED, summary="Create a monthly income")
+@limiter.limit(WRITE_LIMIT, key_func=user_or_ip_key)
 def created_monthly_income(
+    request: Request,
     monthly_income_in: MonthlyIncomeCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Crea un ingreso mensual de un usuario autenticado
-
+    """ Create a monthly income for an authenticated user """
     new_monthly_income = MonthlyIncome(
         user_id = current_user.id,
         year = monthly_income_in.year,
@@ -37,17 +39,17 @@ def created_monthly_income(
     return new_monthly_income
 
 
-
-@router.get("", response_model=list[MonthlyIncomeOut])
+@router.get("", response_model=list[MonthlyIncomeOut], summary="List the monthly incomes that belongs to a user",)
+@limiter.limit(READ_LIMIT, key_func=user_or_ip_key)
 def list_monthly_incomes(
-    year: int | None = None,
-    month: list[int] | None = Query(default=None),
+    request: Request,
+    year: int | None = Query(default=None, description="Year to consult", examples=[2026]) ,
+    month: list[int] | None = Query(default=None, description="Months 1-12. Repeatable: month=1&month=3"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Lista los ingresos mensuales del usuario autenticado
-    # adicionalmente maneja filtros de año y mes si el usuario lo necesita
-
+    """ List all the monthly incomes that belongs to a user. In addition, manage filters for year and month."""
+    
     query = db.query(MonthlyIncome).filter(
         MonthlyIncome.user_id == current_user.id
     )
@@ -60,13 +62,22 @@ def list_monthly_incomes(
     return query.order_by(MonthlyIncome.created_at.desc()).all()
 
 
-@router.get("/{monthly_income_id}", response_model=MonthlyIncomeOut)
+@router.get(
+    "/{monthly_income_id}", 
+    response_model=MonthlyIncomeOut, 
+    summary="Get a specific monthly income",
+    responses={
+        404: {"description": "Monthly income not found"}
+    }
+)
+@limiter.limit(READ_LIMIT, key_func=user_or_ip_key)
 def get_monthly_income(
+    request: Request,
     monthly_income_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Obtiene un ingreso mensual por su ID
+    """ Get a monthly income by its ID """
     monthly_income = (
         db.query(MonthlyIncome).filter(
             MonthlyIncome.id == monthly_income_id,
@@ -75,19 +86,28 @@ def get_monthly_income(
     )
 
     if monthly_income is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ingreso mensual no encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Monthly income not found")
 
     return monthly_income
 
 
-@router.put("/{monthly_income_id}", response_model=MonthlyIncomeOut)
+@router.put(
+    "/{monthly_income_id}", 
+    response_model=MonthlyIncomeOut, 
+    summary="Update a monthly income",
+    responses={
+        404: {"description": "Monthly income not found"}
+    }
+)
+@limiter.limit(WRITE_LIMIT, key_func=user_or_ip_key)
 def update_monthly_income(
+    request: Request,
     monthly_income_id: UUID,
     monthly_income_in: MonthlyIncomeUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Actualiza un ingreso mensual por su ID
+    """ Update a monthly income by its ID """
     monthly_income = (
             db.query(MonthlyIncome).filter(
                 MonthlyIncome.id == monthly_income_id,
@@ -96,7 +116,7 @@ def update_monthly_income(
         )
     
     if monthly_income is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ingreso mensual no encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Monthly income not found")
 
     # Convierte los campos del schema en un diccionario, incluyendo los campos que el usuario no envío.
     # el excluse_unset solo actualiza los campos que el usuario especificó con los otros sin tocar los demás 
@@ -112,13 +132,22 @@ def update_monthly_income(
     return monthly_income
 
 
-@router.delete("/{monthly_income_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{monthly_income_id}", 
+    status_code=status.HTTP_204_NO_CONTENT, 
+    summary="Delete a monthly income",
+    responses={
+        404: {"description": "Monthly income not found"}
+    }
+)
+@limiter.limit(WRITE_LIMIT, key_func=user_or_ip_key)
 def delete_monthly_income(
+    request: Request,
     monthly_income_id: UUID,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Elimina un ingreso mensual
+    """ Delete a monthly income by its ID """
     monthly_income = (
                 db.query(MonthlyIncome).filter(
                     MonthlyIncome.id == monthly_income_id,
@@ -127,7 +156,7 @@ def delete_monthly_income(
             )
         
     if monthly_income is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Ingreso mensual no encontrado")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Monthly income not found")
 
     db.delete(monthly_income)
     db.commit()
