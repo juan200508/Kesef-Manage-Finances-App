@@ -5,14 +5,17 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.core.rate_limit import limiter
+from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.rate_limit import limiter
 from app.db.base import Base
 from app.db.session import get_db
 from app.api.routers import auth, categories, movements, monthly_incomes, balance
 from app.core.exceptions import AppException
 
+
 logger = logging.getLogger(__name__)
+
 
 tags_metadata = [
     {"name": "auth", "description": "User registration and login."},
@@ -21,6 +24,7 @@ tags_metadata = [
     {"name": "monthly_incomes", "description": "Monthly incomes by sources."},
     {"name": "balance", "description": "Incomes - monthly expenses, with category breakdown."},
 ]
+
 
 app = FastAPI(
     title="Finances API", 
@@ -32,6 +36,15 @@ app = FastAPI(
 
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 @app.exception_handler(AppException)

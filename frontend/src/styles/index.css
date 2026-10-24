@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* Expone los tokens semánticos como clases: bg-canvas, text-content, bg-brand… */
+@theme inline {
+  --color-canvas: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--border);
+  --color-content: var(--text);
+  --color-content-muted: var(--text-muted);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-on-brand: var(--on-brand);
+  --color-income: var(--income);
+  --color-expense: var(--expense);
+  --color-skeleton: var(--skeleton);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}

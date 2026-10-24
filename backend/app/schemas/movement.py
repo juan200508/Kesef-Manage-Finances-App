@@ -16,6 +16,9 @@ class MovementBase(BaseModel):
 
 class MovementCreate(MovementBase):
     """What comes in the body of the POST request to /movements"""
+    movement_date: datetime | None = Field(
+        default=None, description="When it happened. Defaults to now if omitted."
+    )
     model_config = ConfigDict(
         json_schema_extra={
             "examples": [{

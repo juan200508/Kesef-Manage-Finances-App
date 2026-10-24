@@ -51,6 +51,9 @@ def created_movement(
         description = movement_in.description
     )
 
+    if movement_in.movement_date is not None:
+        new_movement.movement_date = movement_in.movement_date
+
     db.add(new_movement)
     db.commit()
     db.refresh(new_movement)
