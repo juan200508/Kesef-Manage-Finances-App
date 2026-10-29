@@ -27,6 +27,7 @@ export function DashboardPage() {
 
     return (
         <div className="space-y-6">
+            <title>Dashboard · Kesef</title>
             <FilterBar
                 year={year}
                 months={months}

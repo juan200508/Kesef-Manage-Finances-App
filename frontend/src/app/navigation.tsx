@@ -1,6 +1,5 @@
 import type { MenuItem } from '../components/ui/BranchedMenu'
-import { RepeatIcon, TrendingUpIcon } from '../components/ui/icons'
-// Paso 6: import { TrendingUpIcon } ...   Paso 7: import { TagIcon } ...
+import { RepeatIcon, TrendingUpIcon, TagIcon } from '../components/ui/icons'
 
 export const NAV_ITEMS: MenuItem[] = [
     { value: '/', label: 'Dashboard' },
@@ -11,6 +10,10 @@ export const NAV_ITEMS: MenuItem[] = [
             { value: '/incomes', label: 'Incomes', icon: <TrendingUpIcon /> },
         ],
     },
-    // Paso 7:
-    // { label: 'Manage', children: [{ value: '/categories', label: 'Categories', icon: <TagIcon /> }] },
+    { 
+        label: 'Manage', 
+        children: [
+            { value: '/categories', label: 'Categories', icon: <TagIcon /> }
+        ] 
+    },
 ]

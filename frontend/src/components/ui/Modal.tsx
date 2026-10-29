@@ -15,7 +15,7 @@ export function Modal({ title, onClose, children, className= 'max-w-md' }: Props
             onClick={onClose}
         >
             {/* stopPropagation: un clic dentro de la tarjeta no debe cerrar el modal */}
-            <div className={`w-full ${className}`}  onClick={(e) => e.stopPropagation()}>
+            <div className={`max-h-full w-full overflow-y-auto ${className}`} onClick={(e) => e.stopPropagation()}>
                 <Card className="space-y-4">
                     <h2 className="text-lg font-semibold">{title}</h2>
                     {children}
