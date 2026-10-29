@@ -46,3 +46,23 @@ export function toDatetimeLocal(date: Date): string {
         `T${pad(date.getHours())}:${pad(date.getMinutes())}`
     )
 }
+
+// Valor interno ("1500000.5") → lo que se muestra ("1.500.000,5")
+export function formatAmountInput(raw: string): string {
+    if (raw === '') return ''
+    const [int, dec] = raw.split('.')
+    const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    return dec === undefined ? grouped : `${grouped},${dec}`
+}
+
+// Lo que escribe el usuario ("1.500.000,5") → valor interno ("1500000.5")
+export function parseAmountInput(text: string): string {
+    const cleaned = text.replace(/[^\d,]/g, '') // solo dígitos y coma decimal
+    const [int, ...rest] = cleaned.split(',')
+    const intPart = int.replace(/^0+(?=\d)/, '').slice(0, 10) // sin ceros a la izquierda, máx. 10 dígitos
+    if (rest.length === 0) return intPart
+    return `${intPart || '0'}.${rest.join('').slice(0, 2)}` // máx. 2 decimales
+}
+
+// "4500000.00" → "4500000" (para mostrar limpio al editar)
+export const normalizeAmount = (amount: string) => amount.replace(/\.00$/, '')

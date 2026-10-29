@@ -1,5 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { IncomeUpdateInput } from '../../api/types'
+import { useToast } from '../../components/ui/toast-context'
 import {
     getIncomes,
     createIncome,
@@ -25,19 +26,37 @@ function useRefreshIncomeData() {
 
 export function useCreateIncome() {
     const refresh = useRefreshIncomeData()
-    return useMutation({ mutationFn: createIncome, onSuccess: refresh })
+    const toast = useToast()
+    return useMutation({ 
+        mutationFn: createIncome, 
+        onSuccess: () => {
+            refresh()
+            toast.success('Income created')
+        } 
+    })
 }
 
 export function useUpdateIncome() {
     const refresh = useRefreshIncomeData()
+    const toast = useToast()
     return useMutation({
         mutationFn: ({ id, data }: {id: string; data: IncomeUpdateInput}) => updateIncome(id, data),
-        onSuccess: refresh
+        onSuccess: () => {
+            refresh()
+            toast.success('Income updated')
+        } 
     })
 }
 
 export function useDeleteIncome() {
     const refresh = useRefreshIncomeData()
-    return useMutation({mutationFn: deleteIncome, onSuccess: refresh})
+    const toast = useToast()
+    return useMutation({
+        mutationFn: deleteIncome, 
+        onSuccess: () => {
+            refresh()
+            toast.success('Income deleted')
+        }
+    })
 }
 
