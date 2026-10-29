@@ -66,7 +66,7 @@ export interface MovementUpdateInput {
     movement_date?: string
 }
 
-export const INCOME_SOURCE = ['SALARIO', 'FREELANCE', 'CONSIGNACIONES', 'OTROS']
+export const INCOME_SOURCE = ['SALARIO', 'FREELANCE', 'CONSIGNACIONES', 'OTROS'] as const
 export type IncomeSource = (typeof INCOME_SOURCE)[number]
 
 export interface Income {
@@ -83,7 +83,7 @@ export interface Income {
 
 export interface IncomeCreateInput{
     amount: string
-    description?: string
+    description?: string | null
     month: number
     year: number
     source: IncomeSource

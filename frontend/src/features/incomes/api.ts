@@ -10,15 +10,15 @@ export async function getIncomes(year: number, months: number[]) {
 }
 
 export async function createIncome(input: IncomeCreateInput) {
-    const { data } = await api.post<Income>('monthly_incomes', input)
+    const { data } = await api.post<Income>('/monthly_incomes', input)
     return data
 }
 
 export async function updateIncome(id: string, input: IncomeUpdateInput) {
-    const { data } = await api.put<Income>(`monthly_incomes/${id}`, input)
+    const { data } = await api.put<Income>(`/monthly_incomes/${id}`, input)
     return data
 }
 
 export async function deleteIncome(id: string) {
-    await api.delete<Income>(`monthly_incomes/${id}`)
+    await api.delete<Income>(`/monthly_incomes/${id}`)
 }

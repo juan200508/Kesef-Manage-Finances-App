@@ -24,7 +24,7 @@ function useRefreshIncomeData() {
 }
 
 export function useCreateIncome() {
-    const refresh = useRefreshIncomeData
+    const refresh = useRefreshIncomeData()
     return useMutation({ mutationFn: createIncome, onSuccess: refresh })
 }
 
@@ -37,7 +37,7 @@ export function useUpdateIncome() {
 }
 
 export function useDeleteIncome() {
-    const refresh = useRefreshIncomeData
+    const refresh = useRefreshIncomeData()
     return useMutation({mutationFn: deleteIncome, onSuccess: refresh})
 }
 

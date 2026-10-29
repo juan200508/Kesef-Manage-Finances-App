@@ -30,7 +30,7 @@ export function IncomeGroups({ groups, onSelect }: Props) {
     if (groups.length === 0) {
         return (
             <Card>
-                <p className="text-sm text-content-muted">No income in this period.</p>
+                <p className="text-sm text-content-muted">No incomes in this period.</p>
             </Card>
         )
     }
