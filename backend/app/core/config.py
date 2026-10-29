@@ -14,4 +14,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    cors_origins: str = "http://localhost:5173"   # varios orígenes separados por coma
+
 settings = Settings()
+

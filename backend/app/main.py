@@ -12,6 +12,7 @@ from app.db.base import Base
 from app.db.session import get_db
 from app.api.routers import auth, categories, movements, monthly_incomes, balance
 from app.core.exceptions import AppException
+from app.core.config import settings
 
 
 logger = logging.getLogger(__name__)
@@ -41,7 +42,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[o.strip() for o in settings.cors_origins.split(",") if o.strip()],
     allow_methods=["*"],
     allow_headers=["*"]
 )
