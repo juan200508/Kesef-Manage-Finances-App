@@ -12,7 +12,7 @@ class MonthlyIncomeBase(BaseModel):
     """ Fields that are shared between create and read an income """
     year: int = Field(ge=2000, le=2100, description="Year of the income, 4 digits format")
     month: int = Field(ge=1, le=12, description="Month of the income (1=January, 12=December)")
-    amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2)]
+    amount: Annotated[Decimal, Field(max_digits=12, decimal_places=2, gt=0)]
     source: MonthlyIncomeSource
     description: str | None = None
 

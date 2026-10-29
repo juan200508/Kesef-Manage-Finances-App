@@ -1,4 +1,5 @@
 import type { MovementType } from '../api/types'
+import type { IncomeSource } from '../api/types'
 
 const cop = new Intl.NumberFormat('es-CO', {
     style: 'currency',
@@ -16,6 +17,13 @@ export const MOVEMENT_TYPE_LABELS: Record<MovementType, string> = {
     RETIRO: 'Withdrawal',
     PAGO: 'Payment',
     OTRO: 'Other',
+}
+
+export const INCOME_SOURCE_LABELS: Record<IncomeSource, string> = {
+    SALARIO: 'Salary',
+    FREELANCE: 'Freelance',
+    CONSIGNACIONES: 'Deposits',
+    OTROS: 'Other'
 }
 
 // El backend guarda UTC pero devuelve "2026-10-24T10:33:59" sin sufijo de zona.
