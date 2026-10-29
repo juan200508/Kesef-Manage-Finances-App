@@ -192,7 +192,7 @@ def create_income(db_session):
 def registered_user(client):
     user_data = {
         "email": "test@kesef.com",
-        "password": "testpass123",
+        "password": "testpass12345*",
         "full_name": "Usuario de prueba",
     }
     register_response = client.post("/register", json=user_data)
@@ -215,7 +215,7 @@ def registered_user(client):
 def other_user(client):
     user_data = {
         "email": "other@kesef.com",
-        "password": "otherpass123",
+        "password": "otherpass123456*",
         "full_name": "Otro usuario de prueba",
     }
     register_response = client.post("/register", json=user_data)

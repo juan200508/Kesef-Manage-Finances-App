@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { Link, Navigate } from 'react-router-dom'
 import { Button } from '../../components/ui/Button'
@@ -8,12 +8,15 @@ import { getErrorMessage } from '../../api/errors'
 import type { RegisterInput } from '../../api/types'
 import { login, register as registerUser } from './api'
 import { useAuth } from './auth-context'
+import { validatePassword } from './passwords'
+import PasswordRules from './PasswordRules'
+import { PASSWORD_MAX } from './passwords'
 
 type RegisterForm = RegisterInput & {confirmPassword: string}
 
 export function RegisterPage() {
     const { isAuthenticated, signIn } = useAuth()
-    const { register, handleSubmit, getValues, formState: { errors } } = useForm<RegisterForm>()
+    const { register, handleSubmit, control, getValues, formState: { errors } } = useForm<RegisterForm>()
 
     const mutation = useMutation({
         mutationFn: async (data: RegisterInput) => {
@@ -22,6 +25,8 @@ export function RegisterPage() {
         },
         onSuccess: (token) => signIn(token.access_token)
     })
+    
+    const password = useWatch({ control, name: 'password' }) ?? ''
 
     if (isAuthenticated) return <Navigate to="/" replace />
 
@@ -52,13 +57,13 @@ export function RegisterPage() {
                 {/* Password */}
                 <div className="space-y-1">
                     <Input type="password" placeholder="Password" 
-                        {...register('password', 
-                            {   required: 'Password is required', 
-                                minLength: {value: 8, message: 'At least 8 characters'},
-                                maxLength: {value: 72, message: 'At least 72 characters'},
-                                deps: ['confirmPassword']
+                           {...register('password', {
+                                required: 'Password is required',
+                                validate: validatePassword,
+                                maxLength: { value: PASSWORD_MAX, message: `At most ${PASSWORD_MAX} characters` },
                             })} />
-                    {errors.password && <p className="text-xs text-expense">{errors.password.message}</p>}
+                    <PasswordRules value={password} />
+                            {errors.password && <p className="text-xs text-expense">{errors.password.message}</p>}
                 </div>
 
                 <div className="space-y-1">
