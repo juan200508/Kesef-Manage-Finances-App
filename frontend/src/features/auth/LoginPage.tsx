@@ -10,8 +10,9 @@ import { login } from './api'
 import { useAuth } from './auth-context'
 
 export function LoginPage() {
-    const { isAuthenticated, signIn } = useAuth()
+    const { isAuthenticated, sessionExpired, signIn } = useAuth()
     const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>()
+    
 
     const mutation = useMutation({
         mutationFn: login,
@@ -24,6 +25,12 @@ export function LoginPage() {
         <main className="mx-auto mt-24 max-w-sm px-4">
         <Card className="space-y-4">
             <h1 className="text-xl font-semibold">Sign in</h1>
+
+            {sessionExpired && (
+                <p className="rounded-md border border-line bg-surface-muted px-3 py-2 text-sm text-content-muted">
+                    Your session expired. Please sign in again.
+                </p>
+            )}
 
             <form onSubmit={handleSubmit((values) => mutation.mutate(values))} className="space-y-3">
             <div className="space-y-1">

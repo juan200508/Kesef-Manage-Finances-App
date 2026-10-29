@@ -96,3 +96,7 @@ export interface IncomeUpdateInput {
     year?: number
     source?: IncomeSource
 }
+
+export interface CategoryInput {
+    name: string
+}

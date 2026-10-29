@@ -11,6 +11,8 @@ __pycache__/
 # Variables de Entorno
 .env
 .env.test
+.env.*
+!.env.example
 
 # OS
 .vscode/

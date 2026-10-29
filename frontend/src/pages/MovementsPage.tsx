@@ -32,6 +32,7 @@ export function MovementsPage() {
 
     return (
         <div className="space-y-6">
+            <title>Movements · Kesef</title>
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-semibold">Movements</h1>
                 <Button onClick={() => setModal({})}>New movement</Button>

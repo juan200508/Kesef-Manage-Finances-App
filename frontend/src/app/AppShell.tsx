@@ -72,7 +72,7 @@ export function AppShell() {
                 </div>
             </header>
 
-            <main className="mx-auto max-w-6xl p-6">
+            <main className="mx-auto max-w-6xl p-4 sm:p-6">
                 <Outlet />
             </main>
         </div>

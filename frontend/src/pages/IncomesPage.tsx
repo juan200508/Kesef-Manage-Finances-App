@@ -44,6 +44,7 @@ export function IncomesPage() {
 
     return (
         <div className="space-y-6">
+            <title>Incomes · Kesef</title>
             <div className="flex items-center justify-between">
                 <h1 className="text-xl font-semibold">Incomes</h1>
                 <Button onClick={() => setModal({ view: 'form' })}>New income</Button>

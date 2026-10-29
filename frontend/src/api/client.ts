@@ -21,10 +21,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.responde?.status == 401 && tokenStorage.get()) {
+        const url: string = error.config?.url ?? ''
+        const isAuthRoute = url.endsWith('/login') || url.endsWith('/register')
+        const sent = String(error.config?.headers?.Authorization ?? '')
+        const current = tokenStorage.get()
+        // Una petición vieja que termina cuando ya hay otra sesión no debe cerrarla
+        const sameSession = sent === (current ? `Bearer ${current}` : '')
+
+        if (error.response?.status === 401 && !isAuthRoute && sameSession) {
             tokenStorage.clear()
             window.dispatchEvent(new Event('auth:logout'))
         }
         return Promise.reject(error)
-    }
+    },
 )
