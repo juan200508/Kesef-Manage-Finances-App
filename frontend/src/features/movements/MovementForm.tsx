@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { getErrorMessage } from '../../api/errors'
 import { MOVEMENT_TYPES } from '../../api/types'
+import { AmountInput } from '../../components/ui/AmountInput'
 import type { Category, Movement, MovementType, MovementUpdateInput } from '../../api/types'
 import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Select } from '../../components/ui/Select'
-import { MOVEMENT_TYPE_LABELS, parseApiDate, toDatetimeLocal } from '../../lib/format'
+import { MOVEMENT_TYPE_LABELS, parseApiDate, toDatetimeLocal, normalizeAmount } from '../../lib/format'
 import { useCreateMovement, useUpdateMovement } from './hooks'
 
 interface FormValues {
@@ -41,7 +42,7 @@ export function MovementForm({ movement, categories, onClose }: Props) {
         ? {
               movement_type: movement.movement_type,
               category_id: movement.category_id,
-              amount: movement.amount,
+              amount: normalizeAmount(movement.amount),
               description: movement.description ?? '',
               movement_date: toDatetimeLocal(parseApiDate(movement.movement_date)),
           }
@@ -53,7 +54,7 @@ export function MovementForm({ movement, categories, onClose }: Props) {
               movement_date: toDatetimeLocal(new Date()),
           }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({ defaultValues: defaults })
+    const { register, handleSubmit, control, formState: { errors } } = useForm<FormValues>({ defaultValues: defaults })
 
     const isPending = create.isPending || update.isPending
     const error = create.error ?? update.error
@@ -107,15 +108,22 @@ export function MovementForm({ movement, categories, onClose }: Props) {
             </Field>
 
             <Field label="Amount (COP)" error={errors.amount?.message}>
-                <Input
-                    type="text"
-                    inputMode="decimal"
-                    placeholder="0.00"
-                    {...register('amount', {
+                <Controller
+                    name="amount"
+                    control={control}
+                    rules={{
                         required: 'Amount is required',
                         pattern: { value: /^\d{1,10}(\.\d{1,2})?$/, message: 'Up to 10 digits and 2 decimals' },
                         validate: (v) => Number(v) > 0 || 'Must be greater than 0',
-                    })}
+                    }}
+                    render={({ field }) => (
+                        <AmountInput
+                            placeholder="0"
+                            value={field.value}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                        />
+                    )}
                 />
             </Field>
 

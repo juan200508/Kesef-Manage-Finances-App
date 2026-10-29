@@ -1,5 +1,6 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { MovementUpdateInput } from '../../api/types'
+import { useToast } from '../../components/ui/toast-context'
 import {
     createMovement,
     deleteMovement,
@@ -27,18 +28,36 @@ function useRefreshMovementData() {
 
 export function useCreateMovement() {
     const refresh = useRefreshMovementData()
-    return useMutation({ mutationFn: createMovement, onSuccess: refresh })
+    const toast = useToast()
+    return useMutation({ 
+        mutationFn: createMovement, 
+        onSuccess: () => {
+            refresh()
+            toast.success('Movement created')
+        }
+    })
 }
 
 export function useUpdateMovement() {
     const refresh = useRefreshMovementData()
+    const toast = useToast()
     return useMutation({
         mutationFn: ({ id, data }: { id: string; data: MovementUpdateInput }) => updateMovement(id, data),
-        onSuccess: refresh,
+        onSuccess: () => {
+            refresh()
+            toast.success('Movement updated')
+        },
     })
 }
 
 export function useDeleteMovement() {
     const refresh = useRefreshMovementData()
-    return useMutation({ mutationFn: deleteMovement, onSuccess: refresh })
+    const toast = useToast()
+    return useMutation({ 
+        mutationFn: deleteMovement, 
+        onSuccess: () => {
+            refresh()
+            toast.success('Movement deleted')
+        }
+    })
 }
