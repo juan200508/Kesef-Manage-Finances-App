@@ -6,6 +6,7 @@ import { LoginPage } from '../features/auth/LoginPage'
 import { RegisterPage } from '../features/auth/RegisterPage'
 import { DashboardPage } from '../pages/DashBoardPage'
 import { MovementsPage } from '../pages/MovementsPage'
+import { IncomesPage } from '../pages/IncomesPage'
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
                 children: [
                     { path: '/', element: <DashboardPage /> },
                     { path: '/movements', element: <MovementsPage /> },
+                    { path: '/incomes', element: <IncomesPage /> },
                 ],
             },
         ],

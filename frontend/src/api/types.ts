@@ -65,3 +65,34 @@ export interface MovementUpdateInput {
     description?: string | null
     movement_date?: string
 }
+
+export const INCOME_SOURCE = ['SALARIO', 'FREELANCE', 'CONSIGNACIONES', 'OTROS']
+export type IncomeSource = (typeof INCOME_SOURCE)[number]
+
+export interface Income {
+    id: string
+    user_id: string
+    source: IncomeSource
+    year: number
+    month: number
+    amount: string
+    description: string
+    created_at: string
+    updated_at: string
+}
+
+export interface IncomeCreateInput{
+    amount: string
+    description?: string
+    month: number
+    year: number
+    source: IncomeSource
+}
+
+export interface IncomeUpdateInput {
+    amount?: string
+    description?: string | null
+    month?: number
+    year?: number
+    source?: IncomeSource
+}
