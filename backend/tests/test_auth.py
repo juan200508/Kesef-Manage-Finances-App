@@ -2,7 +2,7 @@
 def test_register_success(client):
     response = client.post(
         "/register",
-        json={"email": "nuevo@kesef.com", "password": "clave12345", "full_name": "Nuevo Usuario"},
+        json={"email": "nuevo@kesef.com", "password": "claveNueva123457*", "full_name": "Nuevo Usuario"},
     )
 
     assert response.status_code == 201
@@ -15,7 +15,7 @@ def test_register_success(client):
 
 # Intentar realizar un registro con un correo ya existente
 def test_register_duplicate_email(client):
-    user_data = {"email": "duplicado@kesef.com", "password": "clave12345", "full_name": "Uno"}
+    user_data = {"email": "duplicado@kesef.com", "password": "claveNueva123457", "full_name": "Uno"}
     client.post("/register", json=user_data)
 
     response = client.post("/register", json=user_data)
@@ -25,7 +25,7 @@ def test_register_duplicate_email(client):
 
 # Realizar un login de un usuario registrado
 def test_login_success(client):
-    user_data = {"email": "login@kesef.com", "password": "clave12345", "full_name": "Login"}
+    user_data = {"email": "login@kesef.com", "password": "claveNueva123457", "full_name": "Login"}
     client.post("/register", json=user_data)
 
     response = client.post(
